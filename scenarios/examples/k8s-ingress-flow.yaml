@@ -1,0 +1,93 @@
+# Kubernetes Ingress Flow - Auto Layout
+# Complete scenario with zones and auto-positioning
+
+name: Kubernetes Ingress Flow
+description: Request flow from user through Ingress to Pods
+category: Kubernetes
+
+layout:
+  mode: auto
+  direction: LR
+
+zones:
+  - id: external
+    label: EXTERNAL
+    
+  - id: ingress
+    label: INGRESS LAYER
+    
+  - id: cluster
+    label: KUBERNETES CLUSTER
+
+components:
+  # External zone
+  - id: user
+    type: user
+    label: User
+    zone: external
+    
+  - id: dns
+    type: cloud
+    label: DNS
+    zone: external
+
+  # Ingress layer
+  - id: lb
+    type: rectangle
+    label: Load Balancer
+    zone: ingress
+    
+  - id: ingress-ctrl
+    type: hexagon
+    label: Ingress
+    zone: ingress
+
+  # Cluster zone
+  - id: service
+    type: rectangle
+    label: Service
+    zone: cluster
+    
+  - id: pod1
+    type: hexagon
+    label: Pod 1
+    zone: cluster
+    
+  - id: pod2
+    type: hexagon
+    label: Pod 2
+    zone: cluster
+
+connections:
+  - id: c1
+    from: user
+    to: dns
+    
+  - id: c2
+    from: dns
+    to: lb
+    
+  - id: c3
+    from: lb
+    to: ingress-ctrl
+    
+  - id: c4
+    from: ingress-ctrl
+    to: service
+    
+  - id: c5
+    from: service
+    to: pod1
+    
+  - id: c6
+    from: service
+    to: pod2
+
+flow:
+  - user
+  - dns
+  - lb
+  - ingress-ctrl
+  - service
+  - pod1
+  - pod2

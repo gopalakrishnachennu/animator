@@ -1,0 +1,135 @@
+# OAuth 2.0 Authorization Flow
+# Demonstrates the OAuth 2.0 authorization code flow
+
+name: OAuth 2.0 Authorization Flow
+description: How OAuth 2.0 authenticates users securely
+category: Security
+
+components:
+  - id: user
+    type: user
+    position: [100, 250]
+    label: User
+  
+  - id: client-app
+    type: rectangle
+    position: [220, 250]
+    color: "#6366f1"
+    label: Client App
+    size: [100, 60]
+  
+  - id: auth-server
+    type: hexagon
+    position: [400, 150]
+    color: "#f59e0b"
+    label: Auth Server
+  
+  - id: login-page
+    type: rectangle
+    position: [400, 250]
+    color: "#10b981"
+    label: Login Page
+    size: [100, 50]
+  
+  - id: token-endpoint
+    type: gear
+    position: [400, 350]
+    color: "#8b5cf6"
+    label: Token Endpoint
+  
+  - id: resource-server
+    type: server
+    position: [600, 250]
+    color: "#ef4444"
+    label: Resource API
+  
+  - id: protected-data
+    type: database
+    position: [720, 250]
+    color: "#14b8a6"
+    label: Protected Data
+
+connections:
+  - id: user-app
+    from: user
+    to: client-app
+    type: arrow
+
+  - id: app-login
+    from: client-app
+    to: login-page
+    type: arrow
+
+  - id: login-auth
+    from: login-page
+    to: auth-server
+    type: arrow
+
+  - id: auth-code
+    from: auth-server
+    to: client-app
+    type: curve
+
+  - id: app-token
+    from: client-app
+    to: token-endpoint
+    type: arrow
+
+  - id: token-response
+    from: token-endpoint
+    to: client-app
+    type: curve
+
+  - id: app-resource
+    from: client-app
+    to: resource-server
+    type: arrow
+
+  - id: resource-data
+    from: resource-server
+    to: protected-data
+    type: arrow
+
+steps:
+  - title: User Initiates Login
+    description: User clicks login button in client application
+    animate:
+      - fadeIn: [user, client-app]
+      - drawLine: user-app
+      - pulse: client-app
+
+  - title: Redirect to Auth
+    description: App redirects user to authorization server
+    animate:
+      - fadeIn: [login-page, auth-server]
+      - drawLine: app-login
+      - drawLine: login-auth
+      - glow: auth-server
+
+  - title: User Authenticates
+    description: User logs in and grants permission
+    animate:
+      - bounce: login-page
+      - rotate: auth-server
+
+  - title: Authorization Code
+    description: Auth server returns authorization code to app
+    animate:
+      - drawLine: auth-code
+      - pulse: client-app
+
+  - title: Exchange for Token
+    description: App exchanges code for access token
+    animate:
+      - fadeIn: token-endpoint
+      - drawLine: app-token
+      - rotate: token-endpoint
+      - drawLine: token-response
+
+  - title: Access Resources
+    description: App uses token to access protected resources
+    animate:
+      - fadeIn: [resource-server, protected-data]
+      - drawLine: app-resource
+      - drawLine: resource-data
+      - glow: [resource-server, protected-data]

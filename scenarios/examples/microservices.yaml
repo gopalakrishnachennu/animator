@@ -1,0 +1,128 @@
+# Microservices Communication Pattern
+# Shows how microservices communicate via API Gateway and message queue
+
+name: Microservices Architecture
+description: Event-driven microservices with API Gateway
+category: Architecture
+
+components:
+  - id: client
+    type: user
+    position: [100, 200]
+    label: Client App
+  
+  - id: api-gateway
+    type: rectangle
+    position: [220, 200]
+    color: "#f59e0b"
+    label: API Gateway
+    size: [100, 60]
+  
+  - id: auth-svc
+    type: hexagon
+    position: [380, 100]
+    color: "#ef4444"
+    label: Auth Service
+  
+  - id: user-svc
+    type: hexagon
+    position: [380, 200]
+    color: "#6366f1"
+    label: User Service
+  
+  - id: order-svc
+    type: hexagon
+    position: [380, 300]
+    color: "#10b981"
+    label: Order Service
+  
+  - id: message-queue
+    type: cylinder
+    position: [540, 200]
+    color: "#8b5cf6"
+    label: Message Queue
+  
+  - id: notification-svc
+    type: hexagon
+    position: [700, 150]
+    color: "#ec4899"
+    label: Notification
+  
+  - id: analytics-svc
+    type: hexagon
+    position: [700, 250]
+    color: "#14b8a6"
+    label: Analytics
+
+connections:
+  - id: client-api
+    from: client
+    to: api-gateway
+    type: arrow
+
+  - id: api-auth
+    from: api-gateway
+    to: auth-svc
+    type: arrow
+
+  - id: api-user
+    from: api-gateway
+    to: user-svc
+    type: arrow
+
+  - id: api-order
+    from: api-gateway
+    to: order-svc
+    type: arrow
+
+  - id: order-queue
+    from: order-svc
+    to: message-queue
+    type: arrow
+
+  - id: queue-notif
+    from: message-queue
+    to: notification-svc
+    type: arrow
+
+  - id: queue-analytics
+    from: message-queue
+    to: analytics-svc
+    type: arrow
+
+steps:
+  - title: Client Request
+    description: Client sends request to API Gateway
+    animate:
+      - fadeIn: client
+      - fadeIn: api-gateway
+      - drawLine: client-api
+      - pulse: api-gateway
+
+  - title: Authentication
+    description: API Gateway validates request with Auth Service
+    animate:
+      - fadeIn: auth-svc
+      - drawLine: api-auth
+      - glow: auth-svc
+
+  - title: Route to Services
+    description: Gateway routes to appropriate microservice
+    animate:
+      - fadeIn: [user-svc, order-svc]
+      - drawLine: [api-user, api-order]
+      - bounce: [user-svc, order-svc]
+
+  - title: Event Publishing
+    description: Order Service publishes events to message queue
+    animate:
+      - fadeIn: message-queue
+      - drawLine: order-queue
+      - rotate: message-queue
+
+  - title: Event Consumers
+    description: Consumer services process events asynchronously
+    animate:
+      - fadeIn: [notification-svc, analytics-svc]
+      - drawLine: [queue-notif, queue-analytics]
+      - glow: [notification-svc, analytics-svc]

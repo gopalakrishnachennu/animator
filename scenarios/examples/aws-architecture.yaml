@@ -1,0 +1,151 @@
+# AWS Three-Tier Architecture
+# Shows typical web application architecture on AWS
+
+name: AWS Three-Tier Architecture
+description: Load balanced web application with database tier
+category: AWS
+
+zones:
+  - id: public-zone
+    position: [50, 80]
+    size: [300, 350]
+    color: "#10b981"
+    label: Public Subnet
+  
+  - id: private-zone
+    position: [400, 80]
+    size: [380, 350]
+    color: "#6366f1"
+    label: Private Subnet
+
+components:
+  - id: users
+    type: user
+    position: [100, 50]
+    label: Users
+  
+  - id: route53
+    type: cloud
+    position: [200, 50]
+    color: "#f59e0b"
+    label: Route 53
+  
+  - id: alb
+    type: rectangle
+    position: [100, 180]
+    color: "#f59e0b"
+    label: ALB
+    size: [120, 50]
+  
+  - id: web1
+    type: server
+    position: [100, 280]
+    color: "#10b981"
+    label: Web Server 1
+  
+  - id: web2
+    type: server
+    position: [200, 280]
+    color: "#10b981"
+    label: Web Server 2
+  
+  - id: app1
+    type: hexagon
+    position: [450, 180]
+    color: "#6366f1"
+    label: App Server 1
+  
+  - id: app2
+    type: hexagon
+    position: [550, 180]
+    color: "#6366f1"
+    label: App Server 2
+  
+  - id: rds
+    type: database
+    position: [500, 320]
+    color: "#8b5cf6"
+    label: RDS MySQL
+  
+  - id: elasticache
+    type: cylinder
+    position: [650, 320]
+    color: "#ef4444"
+    label: ElastiCache
+
+connections:
+  - id: dns-conn
+    from: users
+    to: route53
+    type: arrow
+
+  - id: alb-conn
+    from: route53
+    to: alb
+    type: arrow
+
+  - id: web1-conn
+    from: alb
+    to: web1
+    type: arrow
+
+  - id: web2-conn
+    from: alb
+    to: web2
+    type: arrow
+
+  - id: app1-conn
+    from: web1
+    to: app1
+    type: arrow
+
+  - id: app2-conn
+    from: web2
+    to: app2
+    type: arrow
+
+  - id: db-conn
+    from: app1
+    to: rds
+    type: arrow
+
+  - id: cache-conn
+    from: app2
+    to: elasticache
+    type: arrow
+
+steps:
+  - title: User Request
+    description: Users access the application via DNS
+    animate:
+      - fadeIn: users
+      - fadeIn: route53
+      - drawLine: dns-conn
+
+  - title: Load Balancing
+    description: Route 53 directs to Application Load Balancer
+    animate:
+      - drawLine: alb-conn
+      - fadeIn: alb
+      - pulse: alb
+
+  - title: Web Tier
+    description: ALB distributes traffic across web servers
+    animate:
+      - fadeIn: [web1, web2]
+      - drawLine: [web1-conn, web2-conn]
+      - bounce: [web1, web2]
+
+  - title: Application Tier
+    description: Web servers communicate with application servers
+    animate:
+      - fadeIn: [app1, app2]
+      - drawLine: [app1-conn, app2-conn]
+      - glow: [app1, app2]
+
+  - title: Data Tier
+    description: App servers access database and cache
+    animate:
+      - fadeIn: [rds, elasticache]
+      - drawLine: [db-conn, cache-conn]
+      - pulse: [rds, elasticache]

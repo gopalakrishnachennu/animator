@@ -1,0 +1,290 @@
+# =====================================================
+# FLOW ANIMATION ENGINE - FEATURE TEST SCENARIO
+# Tests all major features: zones, profiles, animations
+# =====================================================
+
+name: Feature Test - All Capabilities
+description: Comprehensive test of all animation engine features
+category: Testing
+
+# =====================================================
+# LAYOUT CONFIGURATION (v6 Features)
+# =====================================================
+layout:
+  mode: auto
+  profile: pipeline
+  direction: LR
+  hints:
+    primaryPath: [client, gateway, auth, api, cache, db]
+    grouping: zone
+    compact: true
+
+# =====================================================
+# ZONES - Test zone rendering and grouping
+# =====================================================
+zones:
+  - id: frontend
+    label: FRONTEND LAYER
+
+  - id: backend
+    label: BACKEND SERVICES
+    
+  - id: data
+    label: DATA LAYER
+
+# =====================================================
+# COMPONENTS - Test all component types
+# =====================================================
+components:
+  # Frontend Zone
+  - id: client
+    type: user
+    label: Client
+    zone: frontend
+
+  - id: gateway
+    type: cloud
+    label: API Gateway
+    zone: frontend
+
+  # Backend Zone - Primary Path
+  - id: auth
+    type: hexagon
+    label: Auth Service
+    zone: backend
+
+  - id: api
+    type: rectangle
+    label: API Server
+    zone: backend
+
+  # Backend Zone - Branches (test branching)
+  - id: worker1
+    type: gear
+    label: Worker 1
+    zone: backend
+
+  - id: worker2
+    type: gear
+    label: Worker 2
+    zone: backend
+
+  # Data Zone
+  - id: cache
+    type: diamond
+    label: Redis Cache
+    zone: data
+
+  - id: db
+    type: database
+    label: PostgreSQL
+    zone: data
+
+  - id: queue
+    type: cylinder
+    label: Message Queue
+    zone: data
+
+# =====================================================
+# CONNECTIONS - Test cross-zone and branching
+# =====================================================
+connections:
+  # Primary flow
+  - id: c1
+    from: client
+    to: gateway
+    
+  - id: c2
+    from: gateway
+    to: auth
+
+  - id: c3
+    from: auth
+    to: api
+
+  - id: c4
+    from: api
+    to: cache
+
+  - id: c5
+    from: cache
+    to: db
+
+  # Branch to workers (fan-out)
+  - id: c6
+    from: api
+    to: worker1
+
+  - id: c7
+    from: api
+    to: worker2
+
+  # Worker to queue
+  - id: c8
+    from: worker1
+    to: queue
+
+  - id: c9
+    from: worker2
+    to: queue
+
+  # Queue to DB
+  - id: c10
+    from: queue
+    to: db
+
+# =====================================================
+# FLOW ORDER - Defines animation sequence
+# =====================================================
+flow:
+  - client
+  - gateway
+  - auth
+  - api
+  - worker1
+  - worker2
+  - cache
+  - db
+  - queue
+
+# =====================================================
+# CUSTOM STEPS - Test all animation actions
+# =====================================================
+steps:
+  # Step 1: Initialize zones
+  - title: System Initialize
+    description: Boot up all infrastructure zones
+    actions:
+      - type: fadeIn
+        target: frontend
+      - type: fadeIn
+        target: backend
+      - type: fadeIn
+        target: data
+
+  # Step 2: Client request
+  - title: Client Request
+    description: User initiates request
+    actions:
+      - type: fadeIn
+        target: client
+      - type: pulse
+        target: client
+        options:
+          scale: 1.3
+          duration: 0.5
+
+  # Step 3: Gateway
+  - title: API Gateway
+    description: Request hits the gateway
+    actions:
+      - type: fadeIn
+        target: gateway
+      - type: drawLine
+        target: c1
+      - type: glow
+        target: gateway
+
+  # Step 4: Authentication
+  - title: Authentication
+    description: Verify user credentials
+    actions:
+      - type: fadeIn
+        target: auth
+      - type: drawLine
+        target: c2
+      - type: pulse
+        target: auth
+      - type: unglow
+        target: gateway
+
+  # Step 5: API Processing
+  - title: API Processing
+    description: Main business logic
+    actions:
+      - type: fadeIn
+        target: api
+      - type: drawLine
+        target: c3
+      - type: glow
+        target: api
+
+  # Step 6: Fan-out to Workers
+  - title: Worker Distribution
+    description: Parallel processing begins
+    actions:
+      - type: fadeIn
+        target: worker1
+      - type: fadeIn
+        target: worker2
+      - type: drawLine
+        target: c6
+      - type: drawLine
+        target: c7
+      - type: pulse
+        target: worker1
+      - type: pulse
+        target: worker2
+
+  # Step 7: Cache check
+  - title: Cache Lookup
+    description: Check Redis for cached data
+    actions:
+      - type: fadeIn
+        target: cache
+      - type: drawLine
+        target: c4
+      - type: pulse
+        target: cache
+        options:
+          color: "#22c55e"
+
+  # Step 8: Database query
+  - title: Database Query
+    description: Fetch from PostgreSQL
+    actions:
+      - type: fadeIn
+        target: db
+      - type: drawLine
+        target: c5
+      - type: glow
+        target: db
+
+  # Step 9: Queue messages
+  - title: Queue Messages
+    description: Workers send to message queue
+    actions:
+      - type: fadeIn
+        target: queue
+      - type: drawLine
+        target: c8
+      - type: drawLine
+        target: c9
+      - type: pulse
+        target: queue
+
+  # Step 10: Final sync
+  - title: Data Sync
+    description: Queue persists to database
+    actions:
+      - type: drawLine
+        target: c10
+      - type: glow
+        target: db
+      - type: glow
+        target: queue
+
+  # Step 11: Complete
+  - title: Request Complete
+    description: Full request cycle finished
+    actions:
+      - type: glow
+        target: client
+      - type: glow
+        target: gateway
+      - type: glow
+        target: auth
+      - type: glow
+        target: api
+      - type: glow
+        target: cache

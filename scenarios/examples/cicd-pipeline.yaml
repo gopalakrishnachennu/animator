@@ -1,0 +1,208 @@
+# Kubernetes CI/CD Pipeline
+# Example: GitOps deployment flow
+
+name: CI/CD Pipeline Flow
+description: How code changes flow through a CI/CD pipeline to production
+category: DevOps
+
+zones:
+  - id: dev-zone
+    label: DEVELOPMENT
+    position: [30, 50]
+    size: [250, 250]
+    color: "#3b82f6"
+
+  - id: ci-zone
+    label: CI/CD
+    position: [320, 50]
+    size: [350, 250]
+    color: "#8b5cf6"
+
+  - id: prod-zone
+    label: PRODUCTION
+    position: [710, 50]
+    size: [400, 550]
+    color: "#10b981"
+
+components:
+  # Development
+  - id: developer
+    type: user
+    position: [100, 180]
+    label: Developer
+
+  - id: git-repo
+    type: rectangle
+    position: [170, 350]
+    size: [100, 40]
+    color: "#f59e0b"
+    label: Git Repo
+
+  # CI/CD
+  - id: ci-server
+    type: server
+    position: [400, 130]
+    label: Jenkins
+
+  - id: tests
+    type: diamond
+    position: [520, 130]
+    size: 35
+    color: "#f59e0b"
+    label: Tests
+
+  - id: registry
+    type: database
+    position: [400, 250]
+    color: "#8b5cf6"
+    label: Registry
+
+  # Production
+  - id: k8s-cluster
+    type: hexagon
+    position: [850, 150]
+    size: 45
+    color: "#326CE5"
+    label: K8s
+
+  - id: pod1
+    type: hexagon
+    position: [780, 350]
+    size: 25
+    color: "#326CE5"
+    label: Pod
+
+  - id: pod2
+    type: hexagon
+    position: [880, 350]
+    size: 25
+    color: "#326CE5"
+    label: Pod
+
+  - id: pod3
+    type: hexagon
+    position: [980, 350]
+    size: 25
+    color: "#326CE5"
+    label: Pod
+
+connections:
+  - id: dev-to-git
+    from: developer
+    to: git-repo
+    type: arrow
+    color: "#3b82f6"
+
+  - id: git-to-ci
+    from: git-repo
+    to: ci-server
+    type: arrow
+    color: "#f59e0b"
+
+  - id: ci-to-tests
+    from: ci-server
+    to: tests
+    type: arrow
+    color: "#8b5cf6"
+
+  - id: ci-to-registry
+    from: ci-server
+    to: registry
+    type: arrow
+    color: "#8b5cf6"
+
+  - id: registry-to-k8s
+    from: registry
+    to: k8s-cluster
+    type: arrow
+    color: "#10b981"
+
+  - id: k8s-to-pod1
+    from: k8s-cluster
+    to: pod1
+    type: arrow
+    color: "#326CE5"
+
+  - id: k8s-to-pod2
+    from: k8s-cluster
+    to: pod2
+    type: arrow
+    color: "#326CE5"
+
+  - id: k8s-to-pod3
+    from: k8s-cluster
+    to: pod3
+    type: arrow
+    color: "#326CE5"
+
+steps:
+  - title: Developer pushes code
+    description: Developer commits and pushes code changes to Git repository
+    animate:
+      - fadeIn: dev-zone
+      - fadeIn: developer
+      - fadeIn: git-repo
+      - fadeIn: dev-to-git
+      - drawLine: dev-to-git
+        duration: 0.6
+
+  - title: CI pipeline triggered
+    description: Git webhook triggers the CI/CD pipeline
+    animate:
+      - fadeIn: ci-zone
+      - fadeIn: ci-server
+      - fadeIn: git-to-ci
+      - drawLine: git-to-ci
+        duration: 0.8
+      - pulse: ci-server
+
+  - title: Running tests
+    description: Automated tests are executed
+    animate:
+      - fadeIn: tests
+      - fadeIn: ci-to-tests
+      - drawLine: ci-to-tests
+      - pulse: tests
+      - highlight: tests
+        color: "#10b981"
+
+  - title: Building container image
+    description: Docker image is built and pushed to registry
+    animate:
+      - fadeIn: registry
+      - fadeIn: ci-to-registry
+      - drawLine: ci-to-registry
+      - pulse: registry
+      - unhighlight: tests
+
+  - title: Deploying to Kubernetes
+    description: New image is deployed to the cluster
+    animate:
+      - fadeIn: prod-zone
+      - fadeIn: k8s-cluster
+      - fadeIn: registry-to-k8s
+      - drawLine: registry-to-k8s
+        duration: 1
+      - pulse: k8s-cluster
+
+  - title: Pods are created
+    description: Kubernetes creates pods with the new image
+    animate:
+      - fadeIn: k8s-to-pod1
+      - fadeIn: pod1
+      - fadeIn: k8s-to-pod2
+      - fadeIn: pod2
+        delay: 0.2
+      - fadeIn: k8s-to-pod3
+      - fadeIn: pod3
+        delay: 0.4
+
+  - title: Deployment complete!
+    description: All pods are running the new version
+    animate:
+      - highlight: pod1
+        color: "#10b981"
+      - highlight: pod2
+        color: "#10b981"
+      - highlight: pod3
+        color: "#10b981"

@@ -1,0 +1,113 @@
+# Docker Container Lifecycle
+# Demonstrates the lifecycle of a Docker container from build to running
+
+name: Docker Container Lifecycle
+description: How Docker builds, creates, and runs containers
+category: Docker
+
+components:
+  - id: dockerfile
+    type: rectangle
+    position: [100, 300]
+    color: "#2496ED"
+    label: Dockerfile
+    size: [100, 60]
+  
+  - id: docker-build
+    type: gear
+    position: [250, 300]
+    color: "#2496ED"
+    label: docker build
+  
+  - id: image
+    type: cylinder
+    position: [400, 300]
+    color: "#6366f1"
+    label: Docker Image
+  
+  - id: docker-run
+    type: gear
+    position: [550, 300]
+    color: "#2496ED"
+    label: docker run
+  
+  - id: container
+    type: hexagon
+    position: [700, 300]
+    color: "#10b981"
+    label: Container
+  
+  - id: registry
+    type: cloud
+    position: [400, 150]
+    color: "#f59e0b"
+    label: Registry
+
+connections:
+  - id: build-conn
+    from: dockerfile
+    to: docker-build
+    type: arrow
+
+  - id: image-conn
+    from: docker-build
+    to: image
+    type: arrow
+
+  - id: run-conn
+    from: image
+    to: docker-run
+    type: arrow
+
+  - id: container-conn
+    from: docker-run
+    to: container
+    type: arrow
+
+  - id: push-conn
+    from: image
+    to: registry
+    type: arrow
+
+steps:
+  - title: Dockerfile
+    description: Start with a Dockerfile containing build instructions
+    animate:
+      - fadeIn: dockerfile
+      - glow: dockerfile
+
+  - title: Build Image
+    description: Docker CLI reads Dockerfile and builds layers
+    animate:
+      - drawLine: build-conn
+      - fadeIn: docker-build
+      - rotate: docker-build
+
+  - title: Create Image
+    description: Layers are cached and image is created
+    animate:
+      - drawLine: image-conn
+      - fadeIn: image
+      - pulse: image
+
+  - title: Push to Registry
+    description: Optionally push image to Docker Hub or private registry
+    animate:
+      - drawLine: push-conn
+      - fadeIn: registry
+      - bounce: registry
+
+  - title: Run Container
+    description: Docker creates and starts a container from the image
+    animate:
+      - drawLine: run-conn
+      - fadeIn: docker-run
+      - rotate: docker-run
+
+  - title: Container Running
+    description: Container is now running and serving requests
+    animate:
+      - drawLine: container-conn
+      - fadeIn: container
+      - glow: container
+      - pulse: container

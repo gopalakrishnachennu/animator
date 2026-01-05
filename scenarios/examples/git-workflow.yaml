@@ -1,0 +1,143 @@
+# Git Branching Workflow
+# Demonstrates GitFlow branching strategy
+
+name: Git Branching Workflow
+description: Feature branch workflow with pull requests
+category: DevOps
+
+components:
+  - id: main
+    type: rectangle
+    position: [400, 80]
+    color: "#10b981"
+    label: main
+    size: [80, 40]
+  
+  - id: develop
+    type: rectangle
+    position: [400, 160]
+    color: "#6366f1"
+    label: develop
+    size: [80, 40]
+  
+  - id: feature1
+    type: rectangle
+    position: [200, 240]
+    color: "#f59e0b"
+    label: feature/auth
+    size: [100, 40]
+  
+  - id: feature2
+    type: rectangle
+    position: [600, 240]
+    color: "#f59e0b"
+    label: feature/api
+    size: [100, 40]
+  
+  - id: pr1
+    type: circle
+    position: [250, 340]
+    color: "#8b5cf6"
+    label: PR
+    size: 30
+  
+  - id: pr2
+    type: circle
+    position: [550, 340]
+    color: "#8b5cf6"
+    label: PR
+    size: 30
+  
+  - id: release
+    type: hexagon
+    position: [400, 400]
+    color: "#ec4899"
+    label: Release v1.0
+
+connections:
+  - id: main-develop
+    from: main
+    to: develop
+    type: arrow
+
+  - id: develop-f1
+    from: develop
+    to: feature1
+    type: arrow
+
+  - id: develop-f2
+    from: develop
+    to: feature2
+    type: arrow
+
+  - id: f1-pr
+    from: feature1
+    to: pr1
+    type: arrow
+
+  - id: f2-pr
+    from: feature2
+    to: pr2
+    type: arrow
+
+  - id: pr1-develop
+    from: pr1
+    to: develop
+    type: arrow
+
+  - id: pr2-develop
+    from: pr2
+    to: develop
+    type: arrow
+
+  - id: develop-release
+    from: develop
+    to: release
+    type: arrow
+
+  - id: release-main
+    from: release
+    to: main
+    type: arrow
+
+steps:
+  - title: Main Branch
+    description: Production-ready code lives in main
+    animate:
+      - fadeIn: main
+      - glow: main
+
+  - title: Develop Branch
+    description: Create develop branch for integration
+    animate:
+      - fadeIn: develop
+      - drawLine: main-develop
+      - pulse: develop
+
+  - title: Feature Branches
+    description: Developers create feature branches
+    animate:
+      - fadeIn: [feature1, feature2]
+      - drawLine: [develop-f1, develop-f2]
+      - bounce: [feature1, feature2]
+
+  - title: Code Review
+    description: Open Pull Requests for code review
+    animate:
+      - fadeIn: [pr1, pr2]
+      - drawLine: [f1-pr, f2-pr]
+      - rotate: [pr1, pr2]
+
+  - title: Merge to Develop
+    description: Approved PRs are merged to develop
+    animate:
+      - drawLine: [pr1-develop, pr2-develop]
+      - glow: develop
+
+  - title: Release
+    description: Create release and merge to main
+    animate:
+      - fadeIn: release
+      - drawLine: develop-release
+      - drawLine: release-main
+      - glow: [release, main]

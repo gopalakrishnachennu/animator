@@ -1,0 +1,79 @@
+# Simple 3-Tier Architecture - Auto Layout Test
+# Tests zone clustering and connections
+
+name: 3-Tier Web App
+description: Simple web application architecture
+
+layout:
+  mode: auto
+  direction: LR
+
+zones:
+  - id: frontend
+    label: FRONTEND
+
+  - id: backend
+    label: BACKEND
+    
+  - id: data
+    label: DATA LAYER
+
+components:
+  - id: user
+    type: user
+    label: User
+    zone: frontend
+
+  - id: browser
+    type: rectangle
+    label: Browser
+    zone: frontend
+
+  - id: api
+    type: server
+    label: API Server
+    zone: backend
+
+  - id: worker
+    type: gear
+    label: Worker
+    zone: backend
+
+  - id: cache
+    type: cylinder
+    label: Redis
+    zone: data
+
+  - id: db
+    type: database
+    label: PostgreSQL
+    zone: data
+
+connections:
+  - id: conn-1
+    from: user
+    to: browser
+
+  - id: conn-2
+    from: browser
+    to: api
+
+  - id: conn-3
+    from: api
+    to: worker
+
+  - id: conn-4
+    from: api
+    to: cache
+
+  - id: conn-5
+    from: worker
+    to: db
+
+flow:
+  - user
+  - browser
+  - api
+  - worker
+  - cache
+  - db

@@ -1,0 +1,1656 @@
+# ============================================================
+# Kubernetes Deep Dive - Advanced Animations (Manual Layout)
+# ============================================================
+
+name: Kubernetes Deep Dive - Advanced Animations
+description: A multi-scene, in-depth Kubernetes walkthrough with nested zones and rich animations.
+category: Kubernetes
+
+scenes:
+  - name: Cluster Overview
+    description: High-level architecture of a production Kubernetes cluster with nested zones.
+    zones:
+      - id: zone-external
+        label: "EXTERNAL"
+        x: 40
+        y: 80
+        width: 240
+        height: 520
+        color: "#0ea5e9"
+        labelPosition: top-left
+      - id: zone-edge
+        label: "EDGE"
+        x: 300
+        y: 80
+        width: 260
+        height: 520
+        color: "#6366f1"
+        labelPosition: top-left
+      - id: zone-cluster
+        label: "KUBERNETES CLUSTER"
+        x: 590
+        y: 80
+        width: 640
+        height: 520
+        color: "#14b8a6"
+        labelPosition: top-left
+      - id: zone-control
+        label: "CONTROL PLANE"
+        x: 620
+        y: 120
+        width: 270
+        height: 190
+        color: "#f59e0b"
+        labelPosition: top-left
+      - id: zone-observe
+        label: "OBSERVABILITY"
+        x: 920
+        y: 120
+        width: 280
+        height: 190
+        color: "#8b5cf6"
+        labelPosition: top-left
+      - id: zone-data
+        label: "DATA PLANE"
+        x: 620
+        y: 340
+        width: 580
+        height: 240
+        color: "#10b981"
+        labelPosition: top-left
+
+    components:
+      - id: user
+        type: user
+        label: User
+        x: 165
+        y: 210
+        size: 1.1
+        color: "#60a5fa"
+      - id: dns
+        type: cloud
+        label: DNS
+        x: 90
+        y: 360
+        width: 140
+        height: 70
+        color: "#f59e0b"
+      - id: api-gw
+        type: rectangle
+        label: API Gateway
+        x: 330
+        y: 210
+        width: 150
+        height: 60
+        color: "#6366f1"
+      - id: ingress
+        type: hexagon
+        label: Ingress
+        x: 450
+        y: 390
+        size: 40
+        color: "#3b82f6"
+      - id: kube-api
+        type: rectangle
+        label: API Server
+        x: 650
+        y: 160
+        width: 150
+        height: 60
+        color: "#0ea5e9"
+      - id: scheduler
+        type: gear
+        label: Scheduler
+        x: 850
+        y: 175
+        size: 28
+        color: "#f97316"
+      - id: controller
+        type: hexagon
+        label: Controller
+        x: 700
+        y: 255
+        size: 36
+        color: "#f59e0b"
+      - id: etcd
+        type: database
+        label: etcd
+        x: 830
+        y: 255
+        size: 1
+        color: "#ef4444"
+      - id: prometheus
+        type: database
+        label: Prometheus
+        x: 1060
+        y: 170
+        size: 1
+        color: "#e11d48"
+      - id: grafana
+        type: rectangle
+        label: Grafana
+        x: 980
+        y: 235
+        width: 150
+        height: 55
+        color: "#f97316"
+      - id: service
+        type: rectangle
+        label: Service
+        x: 670
+        y: 400
+        width: 130
+        height: 55
+        color: "#22c55e"
+      - id: pod-a
+        type: hexagon
+        label: Pod A
+        x: 840
+        y: 415
+        size: 36
+        color: "#8b5cf6"
+      - id: pod-b
+        type: hexagon
+        label: Pod B
+        x: 840
+        y: 495
+        size: 36
+        color: "#a855f7"
+      - id: queue
+        type: cylinder
+        label: Queue
+        x: 950
+        y: 470
+        width: 70
+        height: 90
+        color: "#06b6d4"
+      - id: worker
+        type: gear
+        label: Worker
+        x: 1030
+        y: 435
+        size: 30
+        color: "#f59e0b"
+      - id: db
+        type: database
+        label: Database
+        x: 1120
+        y: 435
+        size: 1
+        color: "#ef4444"
+      - id: storage
+        type: cylinder
+        label: Object Store
+        x: 1090
+        y: 520
+        width: 80
+        height: 70
+        color: "#0ea5e9"
+
+    connections:
+      - id: c-user-dns
+        type: arrow
+        from: user
+        to: dns
+        color: "#60a5fa"
+      - id: c-dns-gw
+        type: orthogonal
+        from: dns
+        to: api-gw
+        color: "#f59e0b"
+      - id: c-gw-ingress
+        type: orthogonal
+        from: api-gw
+        to: ingress
+        color: "#6366f1"
+      - id: c-ingress-api
+        type: orthogonal
+        from: ingress
+        to: kube-api
+        color: "#3b82f6"
+      - id: c-api-scheduler
+        type: arrow
+        from: kube-api
+        to: scheduler
+        color: "#0ea5e9"
+      - id: c-api-controller
+        type: arrow
+        from: kube-api
+        to: controller
+        color: "#0ea5e9"
+      - id: c-api-etcd
+        type: arrow
+        from: kube-api
+        to: etcd
+        color: "#0ea5e9"
+      - id: c-api-service
+        type: orthogonal
+        from: kube-api
+        to: service
+        color: "#0ea5e9"
+      - id: c-service-pod-a
+        type: arrow
+        from: service
+        to: pod-a
+        color: "#22c55e"
+      - id: c-service-pod-b
+        type: arrow
+        from: service
+        to: pod-b
+        color: "#22c55e"
+      - id: c-service-queue
+        type: orthogonal
+        from: service
+        to: queue
+        color: "#22c55e"
+      - id: c-queue-worker
+        type: orthogonal
+        from: queue
+        to: worker
+        color: "#06b6d4"
+      - id: c-worker-db
+        type: orthogonal
+        from: worker
+        to: db
+        color: "#f59e0b"
+      - id: c-worker-storage
+        type: orthogonal
+        from: worker
+        to: storage
+        color: "#f59e0b"
+      - id: c-api-prometheus
+        type: orthogonal
+        from: kube-api
+        to: prometheus
+        color: "#0ea5e9"
+        dashed: true
+      - id: c-prometheus-grafana
+        type: orthogonal
+        from: prometheus
+        to: grafana
+        color: "#e11d48"
+
+    steps:
+      - title: Initialize the World
+        description: Bring up external, edge, and cluster zones to establish the operating boundaries.
+        actions:
+          - type: fadeIn
+            target: zone-external
+            duration: 0.4
+          - type: fadeIn
+            target: zone-edge
+            duration: 0.4
+            delay: 0.1
+          - type: fadeIn
+            target: zone-cluster
+            duration: 0.4
+            delay: 0.2
+          - type: fadeIn
+            target: zone-control
+            duration: 0.4
+            delay: 0.3
+          - type: fadeIn
+            target: zone-observe
+            duration: 0.4
+            delay: 0.4
+          - type: fadeIn
+            target: zone-data
+            duration: 0.4
+            delay: 0.5
+
+      - title: External Entry
+        description: A user request enters through DNS.
+        actions:
+          - type: fadeIn
+            target: user
+            duration: 0.3
+          - type: fadeIn
+            target: dns
+            duration: 0.3
+          - type: drawLine
+            target: c-user-dns
+          - type: pulse
+            target: dns
+
+      - title: Edge Routing
+        description: Gateway forwards traffic to Ingress.
+        actions:
+          - type: fadeIn
+            target: api-gw
+            duration: 0.3
+          - type: fadeIn
+            target: ingress
+            duration: 0.3
+          - type: drawLine
+            target: c-dns-gw
+          - type: drawLine
+            target: c-gw-ingress
+          - type: glow
+            target: ingress
+
+      - title: Control Plane Core
+        description: API Server fans out to Scheduler, Controller, and etcd.
+        actions:
+          - type: fadeIn
+            target: kube-api
+            duration: 0.3
+          - type: fadeIn
+            target: scheduler
+            duration: 0.3
+            delay: 0.1
+          - type: fadeIn
+            target: controller
+            duration: 0.3
+            delay: 0.2
+          - type: fadeIn
+            target: etcd
+            duration: 0.3
+            delay: 0.3
+          - type: drawLine
+            target: c-ingress-api
+          - type: drawLine
+            target: c-api-scheduler
+          - type: drawLine
+            target: c-api-controller
+          - type: drawLine
+            target: c-api-etcd
+          - type: rotate
+            target: scheduler
+            duration: 0.6
+
+      - title: Data Plane Entry
+        description: API Server connects requests into Services and Pods.
+        actions:
+          - type: fadeIn
+            target: service
+            duration: 0.3
+          - type: fadeIn
+            target: pod-a
+            duration: 0.3
+          - type: fadeIn
+            target: pod-b
+            duration: 0.3
+            delay: 0.1
+          - type: drawLine
+            target: c-api-service
+          - type: drawLine
+            target: c-service-pod-a
+          - type: drawLine
+            target: c-service-pod-b
+          - type: pulse
+            target: pod-a
+
+      - title: Async Workloads
+        description: Services enqueue work; workers persist results.
+        actions:
+          - type: fadeIn
+            target: queue
+            duration: 0.3
+          - type: fadeIn
+            target: worker
+            duration: 0.3
+          - type: fadeIn
+            target: db
+            duration: 0.3
+          - type: fadeIn
+            target: storage
+            duration: 0.3
+          - type: drawLine
+            target: c-service-queue
+          - type: drawLine
+            target: c-queue-worker
+          - type: drawLine
+            target: c-worker-db
+          - type: drawLine
+            target: c-worker-storage
+          - type: rotate
+            target: worker
+            duration: 0.6
+
+      - title: Observability Loop
+        description: Metrics go into Prometheus and Grafana.
+        actions:
+          - type: fadeIn
+            target: prometheus
+            duration: 0.3
+          - type: fadeIn
+            target: grafana
+            duration: 0.3
+            delay: 0.1
+          - type: drawLine
+            target: c-api-prometheus
+          - type: drawLine
+            target: c-prometheus-grafana
+          - type: glow
+            target: grafana
+
+      - title: Flow Complete
+        description: System is healthy and ready to scale.
+        actions:
+          - type: glow
+            target: [user, api-gw, ingress, kube-api, service, pod-a, pod-b, prometheus]
+          - type: blink
+            target: grafana
+            duration: 0.6
+            repeat: 2
+
+  - name: Control Plane Deep Dive
+    description: A detailed view of API Server, etcd, Scheduler, and Controller reconciliation loops.
+    zones:
+      - id: zone-control
+        label: "CONTROL PLANE"
+        x: 80
+        y: 80
+        width: 1080
+        height: 520
+        color: "#f59e0b"
+        labelPosition: top-left
+
+    components:
+      # Row 1: Admin + API Server + etcd + Scheduler + Controller (y=200)
+      - id: admin
+        type: user
+        label: Admin
+        x: 160
+        y: 220
+        size: 1
+        color: "#60a5fa"
+      - id: kube-api
+        type: rectangle
+        label: API Server
+        x: 300
+        y: 180
+        width: 150
+        height: 55
+        color: "#0ea5e9"
+      - id: etcd
+        type: database
+        label: etcd
+        x: 500
+        y: 200
+        size: 1
+        color: "#ef4444"
+      - id: scheduler
+        type: gear
+        label: Scheduler
+        x: 640
+        y: 200
+        size: 28
+        color: "#f97316"
+      - id: controller
+        type: gear
+        label: Controller Manager
+        x: 800
+        y: 200
+        size: 28
+        color: "#8b5cf6"
+      - id: cloud-controller
+        type: gear
+        label: Cloud Controller
+        x: 960
+        y: 200
+        size: 26
+        color: "#22c55e"
+      # Row 2: AuthN + AuthZ + Admission (y=340)
+      - id: authn
+        type: diamond
+        label: AuthN
+        x: 280
+        y: 340
+        size: 40
+        color: "#f59e0b"
+      - id: authz
+        type: diamond
+        label: AuthZ
+        x: 400
+        y: 340
+        size: 40
+        color: "#f59e0b"
+      - id: admission
+        type: hexagon
+        label: Admission
+        x: 520
+        y: 340
+        size: 38
+        color: "#f97316"
+      # Row 3: API Metrics + Audit Log (y=480)
+      - id: apiserver-metrics
+        type: rectangle
+        label: API Metrics
+        x: 640
+        y: 340
+        width: 140
+        height: 50
+        color: "#06b6d4"
+      - id: audit-log
+        type: cylinder
+        label: Audit Log
+        x: 820
+        y: 340
+        width: 70
+        height: 80
+        color: "#0ea5e9"
+
+    connections:
+      - id: c-admin-api
+        type: orthogonal
+        from: admin
+        to: kube-api
+        color: "#60a5fa"
+      - id: c-api-authn
+        type: arrow
+        from: kube-api
+        to: authn
+        color: "#0ea5e9"
+      - id: c-authn-authz
+        type: arrow
+        from: authn
+        to: authz
+        color: "#f59e0b"
+      - id: c-authz-admission
+        type: arrow
+        from: authz
+        to: admission
+        color: "#f59e0b"
+      - id: c-api-etcd
+        type: orthogonal
+        from: kube-api
+        to: etcd
+        color: "#0ea5e9"
+      - id: c-api-scheduler
+        type: orthogonal
+        from: kube-api
+        to: scheduler
+        color: "#0ea5e9"
+      - id: c-api-controller
+        type: orthogonal
+        from: kube-api
+        to: controller
+        color: "#0ea5e9"
+      - id: c-controller-cloud
+        type: orthogonal
+        from: controller
+        to: cloud-controller
+        color: "#8b5cf6"
+      - id: c-api-metrics
+        type: orthogonal
+        from: kube-api
+        to: apiserver-metrics
+        color: "#06b6d4"
+      - id: c-api-audit
+        type: orthogonal
+        from: kube-api
+        to: audit-log
+        color: "#0ea5e9"
+
+    steps:
+      - title: Control Plane Initialization
+        description: Bring up core control plane services.
+        actions:
+          - type: fadeIn
+            target: zone-control
+            duration: 0.4
+          - type: fadeIn
+            target: kube-api
+            duration: 0.3
+          - type: fadeIn
+            target: etcd
+            duration: 0.3
+            delay: 0.1
+          - type: fadeIn
+            target: scheduler
+            duration: 0.3
+            delay: 0.2
+          - type: fadeIn
+            target: controller
+            duration: 0.3
+            delay: 0.3
+
+      - title: API Request Entry
+        description: Admin submits an API request.
+        actions:
+          - type: fadeIn
+            target: admin
+            duration: 0.3
+          - type: drawLine
+            target: c-admin-api
+          - type: pulse
+            target: kube-api
+
+      - title: Authentication and Authorization
+        description: Request is authenticated and authorized.
+        actions:
+          - type: fadeIn
+            target: authn
+            duration: 0.3
+          - type: fadeIn
+            target: authz
+            duration: 0.3
+            delay: 0.1
+          - type: drawLine
+            target: c-api-authn
+          - type: drawLine
+            target: c-authn-authz
+          - type: highlight
+            target: authz
+            color: "#f59e0b"
+
+      - title: Admission Controllers
+        description: Policy checks and mutations happen at admission.
+        actions:
+          - type: fadeIn
+            target: admission
+            duration: 0.3
+          - type: drawLine
+            target: c-authz-admission
+          - type: pulse
+            target: admission
+
+      - title: State Persistence
+        description: Desired state is stored in etcd.
+        actions:
+          - type: drawLine
+            target: c-api-etcd
+          - type: pulse
+            target: etcd
+
+      - title: Scheduling Decision
+        description: Scheduler watches for pending pods and assigns nodes.
+        actions:
+          - type: drawLine
+            target: c-api-scheduler
+          - type: rotate
+            target: scheduler
+            duration: 0.6
+
+      - title: Reconciliation Loop
+        description: Controllers reconcile desired and current state.
+        actions:
+          - type: drawLine
+            target: c-api-controller
+          - type: rotate
+            target: controller
+            duration: 0.6
+
+      - title: Cloud Integration
+        description: Cloud Controller syncs load balancers and disks.
+        actions:
+          - type: fadeIn
+            target: cloud-controller
+            duration: 0.3
+          - type: drawLine
+            target: c-controller-cloud
+          - type: pulse
+            target: cloud-controller
+
+      - title: Control Plane Telemetry
+        description: API server exports metrics and audit logs.
+        actions:
+          - type: fadeIn
+            target: apiserver-metrics
+            duration: 0.3
+          - type: fadeIn
+            target: audit-log
+            duration: 0.3
+            delay: 0.1
+          - type: drawLine
+            target: c-api-metrics
+          - type: drawLine
+            target: c-api-audit
+
+  - name: Scheduling and Nodes
+    description: How the scheduler selects nodes, and kubelets create pods.
+    zones:
+      - id: zone-control
+        label: "CONTROL PLANE"
+        x: 60
+        y: 80
+        width: 460
+        height: 520
+        color: "#f59e0b"
+        labelPosition: top-left
+      - id: zone-nodes
+        label: "WORKER NODES"
+        x: 560
+        y: 80
+        width: 660
+        height: 520
+        color: "#10b981"
+        labelPosition: top-left
+
+    components:
+      - id: api
+        type: rectangle
+        label: API Server
+        x: 120
+        y: 160
+        width: 160
+        height: 60
+        color: "#0ea5e9"
+      - id: scheduler
+        type: gear
+        label: Scheduler
+        x: 320
+        y: 170
+        size: 30
+        color: "#f97316"
+      - id: queue
+        type: cylinder
+        label: Pending Queue
+        x: 230
+        y: 300
+        width: 90
+        height: 100
+        color: "#06b6d4"
+      - id: node-a
+        type: server
+        label: Node A
+        x: 640
+        y: 160
+        size: 1
+      - id: node-b
+        type: server
+        label: Node B
+        x: 820
+        y: 160
+        size: 1
+      - id: node-c
+        type: server
+        label: Node C
+        x: 1000
+        y: 160
+        size: 1
+      - id: kubelet-a
+        type: gear
+        label: Kubelet A
+        x: 640
+        y: 300
+        size: 26
+        color: "#f59e0b"
+      - id: kubelet-b
+        type: gear
+        label: Kubelet B
+        x: 820
+        y: 300
+        size: 26
+        color: "#f59e0b"
+      - id: kubelet-c
+        type: gear
+        label: Kubelet C
+        x: 1000
+        y: 300
+        size: 26
+        color: "#f59e0b"
+      - id: pod-a
+        type: hexagon
+        label: Pod A
+        x: 640
+        y: 430
+        size: 34
+        color: "#8b5cf6"
+      - id: pod-b
+        type: hexagon
+        label: Pod B
+        x: 820
+        y: 430
+        size: 34
+        color: "#8b5cf6"
+      - id: pod-c
+        type: hexagon
+        label: Pod C
+        x: 1000
+        y: 430
+        size: 34
+        color: "#8b5cf6"
+
+    connections:
+      - id: c-api-queue
+        type: orthogonal
+        from: api
+        to: queue
+        color: "#0ea5e9"
+      - id: c-api-scheduler
+        type: orthogonal
+        from: api
+        to: scheduler
+        color: "#0ea5e9"
+      - id: c-scheduler-node-a
+        type: orthogonal
+        from: scheduler
+        to: node-a
+        color: "#f97316"
+      - id: c-scheduler-node-b
+        type: orthogonal
+        from: scheduler
+        to: node-b
+        color: "#f97316"
+      - id: c-scheduler-node-c
+        type: orthogonal
+        from: scheduler
+        to: node-c
+        color: "#f97316"
+      - id: c-node-a-kubelet
+        type: arrow
+        from: node-a
+        to: kubelet-a
+        color: "#10b981"
+      - id: c-node-b-kubelet
+        type: arrow
+        from: node-b
+        to: kubelet-b
+        color: "#10b981"
+      - id: c-node-c-kubelet
+        type: arrow
+        from: node-c
+        to: kubelet-c
+        color: "#10b981"
+      - id: c-kubelet-a-pod
+        type: arrow
+        from: kubelet-a
+        to: pod-a
+        color: "#8b5cf6"
+      - id: c-kubelet-b-pod
+        type: arrow
+        from: kubelet-b
+        to: pod-b
+        color: "#8b5cf6"
+      - id: c-kubelet-c-pod
+        type: arrow
+        from: kubelet-c
+        to: pod-c
+        color: "#8b5cf6"
+
+    steps:
+      - title: Scheduler Ready
+        description: API Server and Scheduler are ready to assign pods.
+        actions:
+          - type: fadeIn
+            target: zone-control
+            duration: 0.4
+          - type: fadeIn
+            target: zone-nodes
+            duration: 0.4
+            delay: 0.1
+          - type: fadeIn
+            target: api
+            duration: 0.3
+          - type: fadeIn
+            target: scheduler
+            duration: 0.3
+            delay: 0.1
+          - type: fadeIn
+            target: queue
+            duration: 0.3
+            delay: 0.2
+
+      - title: Pending Queue
+        description: Pods wait in the scheduling queue.
+        actions:
+          - type: drawLine
+            target: c-api-queue
+          - type: pulse
+            target: queue
+
+      - title: Scheduling Decision
+        description: Scheduler selects a target node.
+        actions:
+          - type: drawLine
+            target: c-api-scheduler
+          - type: rotate
+            target: scheduler
+            duration: 0.6
+
+      - title: Nodes Available
+        description: Nodes register and report capacity.
+        actions:
+          - type: fadeIn
+            target: node-a
+            duration: 0.3
+          - type: fadeIn
+            target: node-b
+            duration: 0.3
+            delay: 0.1
+          - type: fadeIn
+            target: node-c
+            duration: 0.3
+            delay: 0.2
+
+      - title: Scheduler Assignments
+        description: Scheduler posts bindings to nodes.
+        actions:
+          - type: drawLine
+            target: c-scheduler-node-a
+          - type: drawLine
+            target: c-scheduler-node-b
+          - type: drawLine
+            target: c-scheduler-node-c
+
+      - title: Kubelets Act
+        description: Kubelets pull pod specs and start containers.
+        actions:
+          - type: fadeIn
+            target: kubelet-a
+            duration: 0.3
+          - type: fadeIn
+            target: kubelet-b
+            duration: 0.3
+            delay: 0.1
+          - type: fadeIn
+            target: kubelet-c
+            duration: 0.3
+            delay: 0.2
+          - type: drawLine
+            target: c-node-a-kubelet
+          - type: drawLine
+            target: c-node-b-kubelet
+          - type: drawLine
+            target: c-node-c-kubelet
+
+      - title: Pods Created
+        description: Pods are created on each node.
+        actions:
+          - type: fadeIn
+            target: pod-a
+            duration: 0.3
+          - type: fadeIn
+            target: pod-b
+            duration: 0.3
+            delay: 0.1
+          - type: fadeIn
+            target: pod-c
+            duration: 0.3
+            delay: 0.2
+          - type: drawLine
+            target: c-kubelet-a-pod
+          - type: drawLine
+            target: c-kubelet-b-pod
+          - type: drawLine
+            target: c-kubelet-c-pod
+          - type: pulse
+            target: pod-a
+
+  - name: Networking and Services
+    description: Networking stack from Service to Pods with CNI and kube-proxy.
+    zones:
+      - id: zone-network
+        label: "NETWORKING"
+        x: 60
+        y: 80
+        width: 1160
+        height: 520
+        color: "#3b82f6"
+        labelPosition: top-left
+
+    components:
+      - id: client
+        type: user
+        label: Client
+        x: 150
+        y: 180
+        size: 1.1
+        color: "#60a5fa"
+      - id: svc
+        type: rectangle
+        label: Service VIP
+        x: 320
+        y: 180
+        width: 150
+        height: 60
+        color: "#22c55e"
+      - id: kube-proxy
+        type: gear
+        label: kube-proxy
+        x: 520
+        y: 180
+        size: 30
+        color: "#f59e0b"
+      - id: cni
+        type: hexagon
+        label: CNI
+        x: 680
+        y: 180
+        size: 40
+        color: "#8b5cf6"
+      - id: pod-a
+        type: hexagon
+        label: Pod A
+        x: 840
+        y: 170
+        size: 36
+        color: "#8b5cf6"
+      - id: pod-b
+        type: hexagon
+        label: Pod B
+        x: 980
+        y: 240
+        size: 36
+        color: "#a855f7"
+      - id: ingress
+        type: hexagon
+        label: Ingress
+        x: 320
+        y: 330
+        size: 40
+        color: "#3b82f6"
+      - id: ingress-ctrl
+        type: rectangle
+        label: Ingress Controller
+        x: 520
+        y: 330
+        width: 180
+        height: 60
+        color: "#6366f1"
+      - id: endpoint-slice
+        type: cylinder
+        label: Endpoints
+        x: 760
+        y: 330
+        width: 80
+        height: 90
+        color: "#06b6d4"
+      - id: mesh
+        type: hexagon
+        label: Service Mesh
+        x: 940
+        y: 340
+        size: 38
+        color: "#f97316"
+
+    connections:
+      - id: c-client-svc
+        type: orthogonal
+        from: client
+        to: svc
+        color: "#60a5fa"
+      - id: c-svc-proxy
+        type: orthogonal
+        from: svc
+        to: kube-proxy
+        color: "#22c55e"
+      - id: c-proxy-cni
+        type: orthogonal
+        from: kube-proxy
+        to: cni
+        color: "#f59e0b"
+      - id: c-cni-pod-a
+        type: arrow
+        from: cni
+        to: pod-a
+        color: "#8b5cf6"
+      - id: c-cni-pod-b
+        type: arrow
+        from: cni
+        to: pod-b
+        color: "#8b5cf6"
+      - id: c-ingress-ctrl
+        type: orthogonal
+        from: ingress
+        to: ingress-ctrl
+        color: "#3b82f6"
+      - id: c-ctrl-endpoints
+        type: orthogonal
+        from: ingress-ctrl
+        to: endpoint-slice
+        color: "#6366f1"
+      - id: c-endpoints-mesh
+        type: orthogonal
+        from: endpoint-slice
+        to: mesh
+        color: "#06b6d4"
+      - id: c-mesh-pod-a
+        type: arrow
+        from: mesh
+        to: pod-a
+        color: "#f97316"
+
+    steps:
+      - title: Networking Boot
+        description: Networking layer comes online.
+        actions:
+          - type: fadeIn
+            target: zone-network
+            duration: 0.4
+          - type: fadeIn
+            target: client
+            duration: 0.3
+          - type: fadeIn
+            target: svc
+            duration: 0.3
+            delay: 0.1
+          - type: fadeIn
+            target: kube-proxy
+            duration: 0.3
+            delay: 0.2
+
+      - title: Service Routing
+        description: Service routes traffic through kube-proxy.
+        actions:
+          - type: drawLine
+            target: c-client-svc
+          - type: drawLine
+            target: c-svc-proxy
+          - type: pulse
+            target: svc
+
+      - title: CNI Networking
+        description: CNI sets up pod networking.
+        actions:
+          - type: fadeIn
+            target: cni
+            duration: 0.3
+          - type: drawLine
+            target: c-proxy-cni
+          - type: pulse
+            target: cni
+
+      - title: Pod Targets
+        description: Traffic flows to pods.
+        actions:
+          - type: fadeIn
+            target: pod-a
+            duration: 0.3
+          - type: fadeIn
+            target: pod-b
+            duration: 0.3
+            delay: 0.1
+          - type: drawLine
+            target: c-cni-pod-a
+          - type: drawLine
+            target: c-cni-pod-b
+
+      - title: Ingress Path
+        description: Ingress controller updates endpoint slices.
+        actions:
+          - type: fadeIn
+            target: ingress
+            duration: 0.3
+          - type: fadeIn
+            target: ingress-ctrl
+            duration: 0.3
+            delay: 0.1
+          - type: drawLine
+            target: c-ingress-ctrl
+          - type: fadeIn
+            target: endpoint-slice
+            duration: 0.3
+          - type: drawLine
+            target: c-ctrl-endpoints
+
+      - title: Service Mesh
+        description: Mesh policies govern east-west traffic.
+        actions:
+          - type: fadeIn
+            target: mesh
+            duration: 0.3
+          - type: drawLine
+            target: c-endpoints-mesh
+          - type: drawLine
+            target: c-mesh-pod-a
+          - type: glow
+            target: mesh
+
+  - name: Storage and Stateful
+    description: Storage classes, PVCs, PVs, CSI, and StatefulSets.
+    zones:
+      - id: zone-storage
+        label: "STORAGE"
+        x: 60
+        y: 80
+        width: 1160
+        height: 520
+        color: "#06b6d4"
+        labelPosition: top-left
+
+    components:
+      - id: app
+        type: rectangle
+        label: Stateful App
+        x: 150
+        y: 170
+        width: 170
+        height: 60
+        color: "#22c55e"
+      - id: pvc
+        type: cylinder
+        label: PVC
+        x: 360
+        y: 170
+        width: 80
+        height: 90
+        color: "#0ea5e9"
+      - id: pv
+        type: cylinder
+        label: PV
+        x: 520
+        y: 170
+        width: 80
+        height: 90
+        color: "#6366f1"
+      - id: storage-class
+        type: rectangle
+        label: StorageClass
+        x: 360
+        y: 320
+        width: 150
+        height: 55
+        color: "#8b5cf6"
+      - id: csi
+        type: hexagon
+        label: CSI Driver
+        x: 560
+        y: 320
+        size: 40
+        color: "#f97316"
+      - id: node-a
+        type: server
+        label: Node A
+        x: 760
+        y: 160
+        size: 1
+      - id: node-b
+        type: server
+        label: Node B
+        x: 920
+        y: 160
+        size: 1
+      - id: disk-a
+        type: cylinder
+        label: Disk A
+        x: 760
+        y: 320
+        width: 80
+        height: 90
+        color: "#ef4444"
+      - id: disk-b
+        type: cylinder
+        label: Disk B
+        x: 920
+        y: 320
+        width: 80
+        height: 90
+        color: "#ef4444"
+      - id: backup
+        type: cloud
+        label: Backup
+        x: 1040
+        y: 330
+        width: 140
+        height: 70
+        color: "#f59e0b"
+
+    connections:
+      - id: c-app-pvc
+        type: orthogonal
+        from: app
+        to: pvc
+        color: "#22c55e"
+      - id: c-pvc-pv
+        type: orthogonal
+        from: pvc
+        to: pv
+        color: "#0ea5e9"
+      - id: c-pv-node-a
+        type: orthogonal
+        from: pv
+        to: node-a
+        color: "#6366f1"
+      - id: c-pv-node-b
+        type: orthogonal
+        from: pv
+        to: node-b
+        color: "#6366f1"
+      - id: c-storageclass-csi
+        type: orthogonal
+        from: storage-class
+        to: csi
+        color: "#8b5cf6"
+      - id: c-csi-disk-a
+        type: orthogonal
+        from: csi
+        to: disk-a
+        color: "#f97316"
+      - id: c-csi-disk-b
+        type: orthogonal
+        from: csi
+        to: disk-b
+        color: "#f97316"
+      - id: c-disk-a-backup
+        type: orthogonal
+        from: disk-a
+        to: backup
+        color: "#ef4444"
+      - id: c-disk-b-backup
+        type: orthogonal
+        from: disk-b
+        to: backup
+        color: "#ef4444"
+
+    steps:
+      - title: Storage Fundamentals
+        description: Storage classes and persistent volumes come online.
+        actions:
+          - type: fadeIn
+            target: zone-storage
+            duration: 0.4
+          - type: fadeIn
+            target: app
+            duration: 0.3
+          - type: fadeIn
+            target: pvc
+            duration: 0.3
+            delay: 0.1
+          - type: fadeIn
+            target: pv
+            duration: 0.3
+            delay: 0.2
+
+      - title: PVC Binding
+        description: PVC binds to a matching PV.
+        actions:
+          - type: drawLine
+            target: c-app-pvc
+          - type: drawLine
+            target: c-pvc-pv
+          - type: pulse
+            target: pvc
+
+      - title: Node Attachment
+        description: PV attaches to node volumes.
+        actions:
+          - type: fadeIn
+            target: node-a
+            duration: 0.3
+          - type: fadeIn
+            target: node-b
+            duration: 0.3
+            delay: 0.1
+          - type: drawLine
+            target: c-pv-node-a
+          - type: drawLine
+            target: c-pv-node-b
+
+      - title: CSI Provisioning
+        description: CSI driver provisions disks.
+        actions:
+          - type: fadeIn
+            target: storage-class
+            duration: 0.3
+          - type: fadeIn
+            target: csi
+            duration: 0.3
+            delay: 0.1
+          - type: drawLine
+            target: c-storageclass-csi
+          - type: rotate
+            target: csi
+            duration: 0.6
+
+      - title: Disk Mapping
+        description: CSI maps disks to nodes.
+        actions:
+          - type: fadeIn
+            target: disk-a
+            duration: 0.3
+          - type: fadeIn
+            target: disk-b
+            duration: 0.3
+            delay: 0.1
+          - type: drawLine
+            target: c-csi-disk-a
+          - type: drawLine
+            target: c-csi-disk-b
+
+      - title: Backup Pipeline
+        description: Data is backed up to object storage.
+        actions:
+          - type: fadeIn
+            target: backup
+            duration: 0.3
+          - type: drawLine
+            target: c-disk-a-backup
+          - type: drawLine
+            target: c-disk-b-backup
+          - type: glow
+            target: backup
+
+  - name: Security and Observability
+    description: Security boundaries, audit, and observability pipelines.
+    zones:
+      - id: zone-security
+        label: "SECURITY"
+        x: 60
+        y: 80
+        width: 560
+        height: 520
+        color: "#ef4444"
+        labelPosition: top-left
+      - id: zone-observe
+        label: "OBSERVABILITY"
+        x: 660
+        y: 80
+        width: 560
+        height: 520
+        color: "#8b5cf6"
+        labelPosition: top-left
+
+    components:
+      - id: oidc
+        type: cloud
+        label: OIDC
+        x: 140
+        y: 180
+        width: 120
+        height: 70
+        color: "#60a5fa"
+      - id: authn
+        type: diamond
+        label: AuthN
+        x: 300
+        y: 180
+        size: 45
+        color: "#f59e0b"
+      - id: authz
+        type: diamond
+        label: AuthZ
+        x: 440
+        y: 180
+        size: 45
+        color: "#f59e0b"
+      - id: policy
+        type: rectangle
+        label: Policy Engine
+        x: 300
+        y: 320
+        width: 170
+        height: 60
+        color: "#ef4444"
+      - id: secrets
+        type: cylinder
+        label: Secrets
+        x: 440
+        y: 320
+        width: 80
+        height: 90
+        color: "#e11d48"
+      - id: audit
+        type: cylinder
+        label: Audit Log
+        x: 140
+        y: 320
+        width: 80
+        height: 90
+        color: "#0ea5e9"
+      - id: prometheus
+        type: database
+        label: Prometheus
+        x: 760
+        y: 180
+        size: 1
+        color: "#e11d48"
+      - id: alertmanager
+        type: rectangle
+        label: Alertmanager
+        x: 920
+        y: 180
+        width: 160
+        height: 55
+        color: "#f97316"
+      - id: grafana
+        type: rectangle
+        label: Grafana
+        x: 920
+        y: 300
+        width: 160
+        height: 55
+        color: "#f59e0b"
+      - id: logging
+        type: cylinder
+        label: Logs
+        x: 760
+        y: 300
+        width: 80
+        height: 90
+        color: "#06b6d4"
+      - id: tracing
+        type: hexagon
+        label: Tracing
+        x: 840
+        y: 430
+        size: 40
+        color: "#22c55e"
+
+    connections:
+      - id: c-oidc-authn
+        type: orthogonal
+        from: oidc
+        to: authn
+        color: "#60a5fa"
+      - id: c-authn-authz
+        type: orthogonal
+        from: authn
+        to: authz
+        color: "#f59e0b"
+      - id: c-authz-policy
+        type: orthogonal
+        from: authz
+        to: policy
+        color: "#f59e0b"
+      - id: c-policy-secrets
+        type: orthogonal
+        from: policy
+        to: secrets
+        color: "#ef4444"
+      - id: c-policy-audit
+        type: orthogonal
+        from: policy
+        to: audit
+        color: "#ef4444"
+      - id: c-prom-alert
+        type: orthogonal
+        from: prometheus
+        to: alertmanager
+        color: "#e11d48"
+      - id: c-prom-grafana
+        type: orthogonal
+        from: prometheus
+        to: grafana
+        color: "#e11d48"
+      - id: c-prom-logs
+        type: orthogonal
+        from: prometheus
+        to: logging
+        color: "#06b6d4"
+      - id: c-logs-trace
+        type: orthogonal
+        from: logging
+        to: tracing
+        color: "#06b6d4"
+
+    steps:
+      - title: Security Foundations
+        description: Authentication, authorization, and policies initialize.
+        actions:
+          - type: fadeIn
+            target: zone-security
+            duration: 0.4
+          - type: fadeIn
+            target: oidc
+            duration: 0.3
+          - type: fadeIn
+            target: authn
+            duration: 0.3
+            delay: 0.1
+          - type: fadeIn
+            target: authz
+            duration: 0.3
+            delay: 0.2
+
+      - title: Policy Controls
+        description: Policies and secrets management enforce guardrails.
+        actions:
+          - type: fadeIn
+            target: policy
+            duration: 0.3
+          - type: fadeIn
+            target: secrets
+            duration: 0.3
+            delay: 0.1
+          - type: drawLine
+            target: c-authz-policy
+          - type: drawLine
+            target: c-policy-secrets
+
+      - title: Audit Trails
+        description: Audit logs capture decisions.
+        actions:
+          - type: fadeIn
+            target: audit
+            duration: 0.3
+          - type: drawLine
+            target: c-policy-audit
+
+      - title: Observability Stack
+        description: Metrics, logs, and traces come online.
+        actions:
+          - type: fadeIn
+            target: zone-observe
+            duration: 0.4
+          - type: fadeIn
+            target: prometheus
+            duration: 0.3
+          - type: fadeIn
+            target: alertmanager
+            duration: 0.3
+            delay: 0.1
+          - type: fadeIn
+            target: grafana
+            duration: 0.3
+            delay: 0.2
+          - type: fadeIn
+            target: logging
+            duration: 0.3
+            delay: 0.3
+          - type: fadeIn
+            target: tracing
+            duration: 0.3
+            delay: 0.4
+
+      - title: Metrics Pipelines
+        description: Prometheus feeds alerts and dashboards.
+        actions:
+          - type: drawLine
+            target: c-prom-alert
+          - type: drawLine
+            target: c-prom-grafana
+          - type: glow
+            target: grafana
+
+      - title: Logs and Traces
+        description: Logs enrich traces for troubleshooting.
+        actions:
+          - type: drawLine
+            target: c-prom-logs
+          - type: drawLine
+            target: c-logs-trace
+          - type: pulse
+            target: tracing
